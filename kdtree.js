@@ -254,4 +254,4 @@ function KNN(data, n, point)
     return neight;
 	
 }
-// module.exports = {Node, KNN, closest_point_brute_force, closest_point, generate_dot, build_kdtree, naive_closest_point, dot_nodes };
+module.exports = {Node, KNN, closest_point_brute_force, closest_point, generate_dot, build_kdtree, naive_closest_point, dot_nodes };
