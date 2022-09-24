@@ -1,4 +1,5 @@
-k = 2;
+k = 3072;
+// k = 2;
 
 class Node{
     constructor(point, axis){
@@ -6,6 +7,7 @@ class Node{
     	this.left = null;
     	this.right = null;
     	this.axis = axis;
+		this.label = label; 
     }
 }
 
@@ -50,7 +52,7 @@ function generate_dot(node){
     return 'digraph G {' + g + '}';
 }
 
-function build_kdtree(points, depth = 0){
+function build_kdtree(points, labels, depth = 0){
     var n = points.length;
     var axis = depth % k;
     
@@ -59,27 +61,24 @@ function build_kdtree(points, depth = 0){
     }
 
     if (n == 1)
-    {        
-        return new Node(points[0], axis)
+    {
+        return new Node(points[0], axis, labels[0])
     }
 
     var median = Math.floor(points.length / 2);
     
-    // Ordenar por el eje
     points.sort(function(a, b)
     {
         return a[axis] - b[axis];
     });
-
-    //console.log(points);
     
     var left = points.slice(0, median);
     var right = points.slice(median + 1);
     
-    var node = new Node(points[median].slice(0, k), axis);
-    node.left = build_kdtree(left, depth + 1); 
+    var node = new Node(points[median].slice(0, k), axis, labels[median].slice(0, k));
+    node.left = build_kdtree(left, labels.slice(0, median), depth + 1); 
 
-    node.right = build_kdtree(right, depth + 1);
+    node.right = build_kdtree(right, labels.slice(median + 1), depth + 1);
 
     return node;
 }
@@ -237,11 +236,10 @@ function deleteNode(arr, node)
 	
 }
 
-function KNN(data, n, point)
-{
-    datat = data;
+function KNN(data, labels, n, point) {
+	datat = data;
     let neight = [];
-    let root = build_kdtree(data);
+    let root = build_kdtree(data, labels);
 
     for(let i = 0; i < n; ++i) {
         let closePoint = closest_point(root, point);
@@ -249,9 +247,9 @@ function KNN(data, n, point)
         neight.push(closePoint);
         rest = deleteNode(datat, closePoint);
 
-        root = build_kdtree(datat);
+        root = build_kdtree(datat, labels);
     }
     return neight;
-	
 }
+
 module.exports = {Node, KNN, closest_point_brute_force, closest_point, generate_dot, build_kdtree, naive_closest_point, dot_nodes };
