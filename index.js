@@ -25,6 +25,7 @@ const createImageFeatures = function(image) {
   mat = image.resize(32, 32);
   // # convertir en un solo array
   let pixel_list = mat.getdataasarray().flat().flat();
+  return pixel_list;
 }
 
 app.get('/', (req, res) => {
@@ -34,7 +35,7 @@ app.get('/', (req, res) => {
   let raw_images = []
   let labels = []
 
-  image_paths.forEach(function(image_path) {
+  image_paths.forEach(function(image_path){
     
     let image = cv.imread(image_path);
     let label = image_path.split('\\')[4];

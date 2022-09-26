@@ -2,7 +2,7 @@ k = 3072;
 // k = 2;
 
 class Node{
-    constructor(point, axis){
+    constructor(point, axis, label){
     	this.point = point;
     	this.left = null;
     	this.right = null;
